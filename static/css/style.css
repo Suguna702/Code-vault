@@ -1,0 +1,121 @@
+/* External CSS file: styles.css */
+
+/* General Styles */
+.chat-container {
+    height: 70vh; /* Reduced height */
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3), -2px -2px 5px rgba(0, 0, 0, 0.2);
+    background-color: #fff;
+    margin-top: 5%;
+    width: 80%;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    border: none;
+}
+
+.chat-box {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: #FFFFFF;
+    animation: fadeIn 0.5s;
+}
+
+.message {
+    margin-bottom: 15px;
+    opacity: 0;
+    animation: slideIn 0.5s forwards;
+}
+
+.message .Me {
+    font-weight: bold;
+    color: #495057;
+}
+
+.message .ZetaBot {
+    color: #007bff;
+    font-weight: bold;
+}
+
+.input-group {
+    position: relative;
+    padding: 20px;
+}
+
+.input-group textarea {
+    resize: none;
+    border-radius: 5px 0 0 5px;
+    border: 1px solid #ccc;
+    height: 38px; /* Adjust height to fit better */
+}
+
+.input-group .btn {
+    border-radius: 0 5px 5px 0;
+    background-color: #075E54;
+    color: #FFFFFF;
+}
+
+.input-group .btn:hover {
+    background-color: #054d43; /* Darker shade on hover */
+}
+
+.data-points ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.data-points li {
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+pre {
+    white-space: pre-wrap;
+    background-color: #f1f1f1;
+    padding: 10px;
+    border-radius: 5px;
+    overflow: auto;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(10px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.animated-header {
+    opacity: 0;
+    animation: fadeIn 1s forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px); /* Optional: Slightly move up while fading in */
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

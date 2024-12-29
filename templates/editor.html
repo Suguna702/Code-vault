@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Code Editor{% endblock %}
+
+{% block content %}
+    <h2>Online Code Editor</h2>
+    <form method="POST">
+        <div class="mb-3">
+            <label for="language" class="form-label">Select Language:</label>
+            <select id="language" name="language" class="form-control">
+                <option value="python" {% if request.form.language == 'python' %}selected{% endif %}>Python</option>
+                <option value="java" {% if request.form.language == 'java' %}selected{% endif %}>Java</option>
+                <option value="javascript" {% if request.form.language == 'javascript' %}selected{% endif %}>JavaScript</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="code" class="form-label">Write Your Code:</label>
+            <textarea class="form-control" id="code" name="code" rows="10">{{ request.form.code }}</textarea>
+        </div>
+        <button type="submit" class="btn btn-success">Run Code</button>
+    </form>
+
+    <h3>Output:</h3>
+    <pre>{{ output }}</pre>
+    <h3>Error:</h3>
+    <pre class="text-danger">{{ error }}</pre>
+{% endblock %}

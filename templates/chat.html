@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+
+{% block title %}Chatbot{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="container mt-4">
+        <div class="chat-container">
+            <div class="chat-box" id="chat-box">
+                <h2 class="text-center sticky-top animated-header" style="background-color: #075E54; color: #FFFFFF; border-radius: 4px;">Chat Bot</h2>
+                <!-- Chat messages will be dynamically inserted here -->
+            </div>
+            <form id="chat-form" method="post" action="/chat">
+                <div class="input-group">
+                    <textarea id="message" name="message" class="form-control" rows="1" placeholder="Type your message here..." required></textarea>
+                    <div class="input-group-append">
+                        <button type="submit" class="btn" id="send-button">Send</button>
+                    </div>
+                </div>
+            </form>
+            <p class="text-center" style="color: #075E54;"><span style="font-weight: bold; color: #075E54;">chatBot</span> can make mistakes. Check important info.</p>
+        </div>
+    </div>
+
+    <!-- jQuery and Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Custom JS -->
+    <script>
+        $(document).ready(function () {
+            function appendMessage(sender, text, dataPoints) {
+                let messageHtml = '<div class="message"><div class="' + sender + '">' + sender.charAt(0).toUpperCase() + sender.slice(1) + ':</div><div>' + text + '</div>';
+                
+                if (dataPoints) {
+                    messageHtml += '<div class="data-points"><ul>';
+                    dataPoints.forEach(point => {
+                        messageHtml += '<li>' + point + '</li>';
+                    });
+                    messageHtml += '</ul></div>';
+                }
+                
+                messageHtml += '</div>';
+                $('#chat-box').append(messageHtml);
+                $('#chat-box').scrollTop($('#chat-box')[0].scrollHeight);
+            }
+    
+            $('#chat-form').on('submit', function (e) {
+                e.preventDefault();
+                var message = $('#message').val();
+                if (message.trim() !== '') {
+                    appendMessage('Me', message);
+                    $('#message').val('');
+    
+                    $.post('/chat', { message: message }, function (data) {
+                        if (data && data.response) {
+                            appendMessage('ZetaBot', '<pre>' + data.response + '</pre>', data.data_points);
+                        } else {
+                            console.error('Response is missing or not in expected format:', data);
+                        }
+                    }).fail(function(jqXHR, textStatus, errorThrown) {
+                        console.error('Request failed:', textStatus, errorThrown);
+                    });
+                }
+            });
+    
+            $('#message').keypress(function (e) {
+                if (e.which === 13 && !e.shiftKey) {
+                    e.preventDefault();
+                    $('#chat-form').submit();
+                }
+            });
+        });
+    </script> 
+
+    <style>
+        /* Internal CSS Styles */
+        /* General Styles */
+        .chat-container {
+            height: 70vh; /* Reduced height */
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3), -2px -2px 5px rgba(0, 0, 0, 0.2);
+            background-color: #fff;
+            margin-top: 5%;
+            width: 80%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            border: none;
+        }
+
+        .chat-box {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #FFFFFF;
+            animation: fadeIn 0.5s;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            opacity: 0;
+            animation: slideIn 0.5s forwards;
+        }
+
+        .message .Me {
+            font-weight: bold;
+            color: #495057;
+        }
+
+        .message .ZetaBot {
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        .input-group {
+            position: relative;
+            padding: 20px;
+        }
+
+        .input-group textarea {
+            resize: none;
+            border-radius: 5px 0 0 5px;
+            border: 1px solid #ccc;
+            height: 38px; /* Adjust height to fit better */
+        }
+
+        .input-group .btn {
+            border-radius: 0 5px 5px 0;
+            background-color: #075E54;
+            color: #FFFFFF;
+        }
+
+        .input-group .btn:hover {
+            background-color: #054d43; /* Darker shade on hover */
+        }
+
+        .data-points ul {
+            list-style-type: none;
+            padding-left: 0;
+            margin: 0;
+        }
+
+        .data-points li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        pre {
+            white-space: pre-wrap;
+            background-color: #f1f1f1;
+            padding: 10px;
+            border-radius: 5px;
+            overflow: auto;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(10px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .animated-header {
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px); /* Optional: Slightly move up while fading in */
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</div>
+{% endblock %}
